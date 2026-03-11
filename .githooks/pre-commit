@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Pre-commit hook for NPM packages
+# Runs quality checks before committing
+
+set -e
+
+echo "🔍 Running pre-commit checks..."
+
+# Check if we have staged files
+if git diff --cached --name-only | grep -qE "\.(js|ts|json)$"; then
+    echo "📝 Found JavaScript/TypeScript files, running checks..."
+    
+    # Run linting
+    echo "  → ESLint..."
+    yarn lint
+    
+    # Run type checking
+    echo "  → TypeScript check..."
+    yarn type-check
+    
+    # Run tests
+    echo "  → Tests..."
+    yarn test
+    
+    echo "✅ All checks passed!"
+else
+    echo "ℹ️  No JavaScript/TypeScript files to check"
+fi

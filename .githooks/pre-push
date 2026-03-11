@@ -1,0 +1,52 @@
+#!/bin/bash
+# Git pre-push hook - Code style validation only
+# Runs ESLint and Prettier checks before push
+
+set -e
+
+echo "🎨 Running code style validation..."
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Function to run command and check result
+run_check() {
+    local cmd="$1"
+    local description="$2"
+
+    echo -e "${BLUE}🔄 $description...${NC}"
+
+    if eval "$cmd"; then
+        echo -e "${GREEN}✅ $description passed${NC}"
+        return 0
+    else
+        echo -e "${RED}❌ $description failed${NC}"
+        echo -e "${RED}💡 Run 'yarn all:fix' to auto-fix formatting issues${NC}"
+        return 1
+    fi
+}
+
+# Check if we're in the right directory
+if [ ! -f "package.json" ]; then
+    echo -e "${RED}❌ Error: Not in a Node.js project directory${NC}"
+    exit 1
+fi
+
+# ESLint check
+if command -v yarn >/dev/null 2>&1 && yarn info eslint >/dev/null 2>&1; then
+    run_check "yarn lint" "ESLint code style check"
+else
+    echo -e "${RED}❌ ESLint not found, skipping linting${NC}"
+fi
+
+# Prettier check
+if command -v yarn >/dev/null 2>&1 && yarn info prettier >/dev/null 2>&1; then
+    run_check "yarn check" "Prettier format check"
+else
+    echo -e "${RED}❌ Prettier not found, skipping format check${NC}"
+fi
+
+echo -e "${GREEN}🎉 Code style validation passed! Safe to push.${NC}"
