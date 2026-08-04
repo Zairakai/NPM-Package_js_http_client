@@ -64,17 +64,20 @@
     "build": "bash node_modules/@zairakai/js-dev-tools/scripts/build.sh",
     "eslint": "bash node_modules/@zairakai/js-dev-tools/scripts/eslint.sh",
     "eslint:fix": "bash node_modules/@zairakai/js-dev-tools/scripts/eslint-fix.sh",
+    "postinstall": "bash node_modules/@zairakai/js-dev-tools/scripts/setup-project.sh --silent || true",
     "markdownlint": "bash node_modules/@zairakai/js-dev-tools/scripts/markdownlint.sh",
     "markdownlint:fix": "bash node_modules/@zairakai/js-dev-tools/scripts/markdownlint-fix.sh",
     "normalize": "make package-normalize",
     "package:validate": "make package-validate",
-    "postinstall": "bash node_modules/@zairakai/js-dev-tools/scripts/setup-project.sh --silent || true",
     "prettier": "bash node_modules/@zairakai/js-dev-tools/scripts/prettier.sh",
     "prettier:fix": "bash node_modules/@zairakai/js-dev-tools/scripts/prettier-fix.sh",
     "setup": "bash node_modules/@zairakai/js-dev-tools/scripts/setup-project.sh",
     "test": "make test-all",
     "typecheck": "tsc --noEmit",
     "validate": "make quality"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
   },
   "dependencies": {
     "axios": "^1.15.0"
@@ -84,7 +87,7 @@
     "@vitest/coverage-v8": "^4.1.4",
     "@zairakai/js-dev-tools": "^1.4.0",
     "knip": "^6.4.1",
-    "sort-package-json": "^3.6.1",
+    "sort-package-json": "^4.0.0",
     "tsup": "^8.0.0",
     "typedoc": "^0.28.19",
     "typescript": "^6.0.3",
@@ -100,8 +103,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "overrides": {
-    "esbuild": "^0.28.1"
   }
 }
