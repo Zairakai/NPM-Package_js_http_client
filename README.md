@@ -5,6 +5,7 @@
 [![Coverage][coverage-badge]][coverage-link]
 
 [![npm][npm-badge]][npm-link]
+[![Docs][docs-badge]][docs]
 [![GitLab Release][gitlab-release-badge]][gitlab-release]
 [![License][license-badge]][license]
 
@@ -13,6 +14,8 @@
 [![Prettier][prettier-badge]][prettier]
 
 Axios-based HTTP client with request tracking, interceptor management, and Laravel CSRF support.
+
+**Documentation: [js-http-client-eb9079.gitlab.io][docs]**
 
 ---
 
@@ -23,6 +26,12 @@ Axios-based HTTP client with request tracking, interceptor management, and Larav
 - **Built-in interceptors** — CSRF token, auth bearer, retry with backoff, error logging, timeout
 - **Laravel ready** — automatic `X-Requested-With` and CSRF headers
 - **TypeScript first** — full type exports including `AxiosInstance`, `AxiosResponse`, `HttpMethod`
+
+---
+
+## Documentation
+
+The documentation site has this guide and the reference of the API generated from the source with TypeDoc, for every released version (selector at the top right, `next` is `main`). Build it with `cd docs && npm ci && npm run dev`. It is published with GitLab Pages from `main`.
 
 ---
 
@@ -130,10 +139,12 @@ make test-all      # vitest + bats + coverage
 [security]: ./SECURITY.md
 [issues-badge]: https://img.shields.io/gitlab/issues/open-raw/zairakai%2Fnpm-packages%2Fhttp-client?logo=gitlab&label=Issues
 [issues]: https://gitlab.com/zairakai/npm-packages/js-http-client/-/issues
-[node-badge]: https://img.shields.io/badge/node.js-%3E%3D22-green.svg?logo=node.js
+[node-badge]: https://img.shields.io/badge/node.js-%3E%3D24-green.svg?logo=node.js
 [node]: https://nodejs.org
 [eslint-badge]: https://img.shields.io/badge/code%20style-eslint-4B32C3.svg?logo=eslint
 [eslint]: https://eslint.org
 [prettier-badge]: https://img.shields.io/badge/formatter-prettier-F7B93E.svg?logo=prettier
 [prettier]: https://prettier.io
 [ecosystem]: https://gitlab.com/zairakai
+[docs]: https://js-http-client-eb9079.gitlab.io
+[docs-badge]: https://img.shields.io/badge/docs-online-blue

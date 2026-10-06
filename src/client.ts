@@ -90,14 +90,19 @@ const DEFAULT_CONFIG: Required<Pick<HttpClientOptions, 'baseURL' | 'timeout' | '
  * @returns Configured axios instance with tracker
  */
 export const createHttpClient = (options: HttpClientOptions = {}): HttpClient => {
-  const config = { ...DEFAULT_CONFIG, ...options }
+  // Deep-merge headers so DEFAULT_CONFIG.headers are never lost when options.headers is provided.
+  const config = {
+    ...DEFAULT_CONFIG,
+    ...options,
+    headers: { ...DEFAULT_CONFIG.headers, ...(options.headers ?? {}) },
+  }
 
   // Create axios instance
   const client = axios.create({
     baseURL: config.baseURL,
     timeout: config.timeout,
     withCredentials: config.withCredentials,
-    headers: { ...DEFAULT_CONFIG.headers, ...config.headers },
+    headers: config.headers,
   })
 
   // Create request tracker if enabled
