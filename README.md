@@ -123,6 +123,11 @@ make test-all      # vitest + bats + coverage
 **Made with ❤️ by [Zairakai][ecosystem]**
 
 <!-- Reference Links -->
+
+## Statistics
+
+![Statistics of js-http-client][stats-card]
+
 [pipeline-main-badge]: https://gitlab.com/zairakai/npm-packages/js-http-client/badges/main/pipeline.svg?ignore_skipped=true&key_text=Main
 [pipeline-main-link]: https://gitlab.com/zairakai/npm-packages/js-http-client/-/commits/main
 [pipeline-develop-badge]: https://gitlab.com/zairakai/npm-packages/js-http-client/badges/develop/pipeline.svg?ignore_skipped=true&key_text=Develop
@@ -148,3 +153,4 @@ make test-all      # vitest + bats + coverage
 [ecosystem]: https://gitlab.com/zairakai
 [docs]: https://js-http-client-eb9079.gitlab.io
 [docs-badge]: https://img.shields.io/badge/docs-online-blue
+[stats-card]: https://gitlab.com/zairakai/gitlab-profile/-/raw/main/assets/projects/js-http-client.svg
