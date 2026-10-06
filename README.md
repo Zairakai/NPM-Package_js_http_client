@@ -5,6 +5,7 @@
 [![Coverage][coverage-badge]][coverage-link]
 
 [![npm][npm-badge]][npm-link]
+[![Docs][docs-badge]][docs]
 [![GitLab Release][gitlab-release-badge]][gitlab-release]
 [![License][license-badge]][license]
 
@@ -14,7 +15,7 @@
 
 Axios-based HTTP client with request tracking, interceptor management, and Laravel CSRF support.
 
-**Documentation: <https://js-http-client-eb9079.gitlab.io>**
+**Documentation: [js-http-client-eb9079.gitlab.io][docs]**
 
 ---
 
@@ -145,3 +146,5 @@ make test-all      # vitest + bats + coverage
 [prettier-badge]: https://img.shields.io/badge/formatter-prettier-F7B93E.svg?logo=prettier
 [prettier]: https://prettier.io
 [ecosystem]: https://gitlab.com/zairakai
+[docs]: https://js-http-client-eb9079.gitlab.io
+[docs-badge]: https://img.shields.io/badge/docs-online-blue
