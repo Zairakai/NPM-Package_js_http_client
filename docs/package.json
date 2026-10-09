@@ -13,5 +13,8 @@
     "typedoc-plugin-markdown": "4.13.1",
     "typedoc-vitepress-theme": "1.1.4",
     "vitepress": "1.6.4"
+  },
+  "overrides": {
+    "vite": "^6.4.3"
   }
 }
