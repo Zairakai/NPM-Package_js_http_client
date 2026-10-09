@@ -3,7 +3,7 @@
 
 include:
   - project: "zairakai/npm-packages/js-dev-tools"
-    ref: 3.2.0
+    ref: 3.3.1
     file: ".gitlab/ci/pipeline-js-package.yml"
 
 variables:
