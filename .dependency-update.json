@@ -1,7 +1,5 @@
 {
-  "reject": [
-    "typescript"
-  ],
+  "reject": ["typescript"],
   "cooldown": "3d",
   "tag": {
     "when": "runtime",
