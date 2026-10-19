@@ -84,14 +84,14 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
-    "@vitest/coverage-v8": "^5.0.3",
-    "@zairakai/js-dev-tools": "^3.5.0",
+    "@vitest/coverage-v8": "^5.0.5",
+    "@zairakai/js-dev-tools": "^3.6.0",
     "knip": "^6.41.0",
-    "sort-package-json": "^4.0.0",
+    "sort-package-json": "^4.1.0",
     "tsup": "^8.5.1",
     "typedoc": "^0.28.20",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.5"
   },
   "peerDependenciesMeta": {
     "axios": {
