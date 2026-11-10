@@ -9,21 +9,21 @@ echo "🔍 Running pre-commit checks..."
 
 # Check if we have staged files
 if git diff --cached --name-only | grep -qE "\.(js|ts|json)$"; then
-    echo "📝 Found JavaScript/TypeScript files, running checks..."
+  echo "📝 Found JavaScript/TypeScript files, running checks..."
     
-    # Run linting
-    echo "  → ESLint..."
-    yarn lint
+  # Run linting
+  echo "  → ESLint..."
+  yarn lint
     
-    # Run type checking
-    echo "  → TypeScript check..."
-    yarn type-check
+  # Run type checking
+  echo "  → TypeScript check..."
+  yarn type-check
     
-    # Run tests
-    echo "  → Tests..."
-    yarn test
+  # Run tests
+  echo "  → Tests..."
+  yarn test
     
-    echo "✅ All checks passed!"
+  echo "✅ All checks passed!"
 else
-    echo "ℹ️  No JavaScript/TypeScript files to check"
+  echo "ℹ️  No JavaScript/TypeScript files to check"
 fi
