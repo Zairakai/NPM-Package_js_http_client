@@ -106,7 +106,7 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
   })
 
   // Create request tracker if enabled
-  const tracker = false !== config.trackRequests ? createRequestTracker() : null
+  const tracker = config.trackRequests !== false ? createRequestTracker() : null
 
   // Add request tracking interceptors
   if (tracker) {
@@ -131,12 +131,12 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
   }
 
   // Add error logging interceptor
-  if (false !== config.enableErrorLogging) {
+  if (config.enableErrorLogging !== false) {
     client.interceptors.response.use((response) => response, createErrorLoggerInterceptor(config.logger))
   }
 
   // Add retry interceptor
-  if (config.retries && 0 < config.retries) {
+  if (config.retries && config.retries > 0) {
     // Add the client instance to configs for retry handling
     client.interceptors.request.use((reqConfig) => {
       ;(reqConfig as any)._axios = client
@@ -145,12 +145,12 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
 
     client.interceptors.response.use(
       (response) => response,
-      createRetryInterceptor(config.retries, config.retryDelay, config.shouldRetry)
+      createRetryInterceptor(config.retries, config.retryDelay, config.shouldRetry),
     )
   }
 
   // Add Laravel-style headers if not disabled
-  if (false !== config.laravel) {
+  if (config.laravel !== false) {
     client.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
   }
 

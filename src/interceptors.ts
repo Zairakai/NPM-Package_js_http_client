@@ -64,7 +64,7 @@ export const createTrackingInterceptors = (tracker: RequestTracker): TrackingInt
 export const createCSRFInterceptor =
   (tokenSource: TokenSource) =>
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = 'function' === typeof tokenSource ? tokenSource() : tokenSource
+    const token = typeof tokenSource === 'function' ? tokenSource() : tokenSource
 
     if (token) {
       config.headers = config.headers ?? {}
@@ -83,7 +83,7 @@ export const createCSRFInterceptor =
 export const createAuthInterceptor =
   (tokenSource: TokenSource, type: string = 'Bearer') =>
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = 'function' === typeof tokenSource ? tokenSource() : tokenSource
+    const token = typeof tokenSource === 'function' ? tokenSource() : tokenSource
 
     if (token) {
       config.headers = config.headers ?? {}
@@ -142,7 +142,7 @@ interface RetryConfig extends InternalAxiosRequestConfig {
 export const createRetryInterceptor = (
   retries: number = 3,
   delay: number = 1000,
-  shouldRetry: ShouldRetryFunction = () => true
+  shouldRetry: ShouldRetryFunction = () => true,
 ) => {
   return async (error: AxiosError): Promise<any> => {
     const config = error.config as RetryConfig | undefined

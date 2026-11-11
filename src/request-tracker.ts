@@ -35,7 +35,7 @@ export const createRequestTracker = (): RequestTracker => {
     },
 
     get isActive(): boolean {
-      return 0 < nbrInternal
+      return nbrInternal > 0
     },
 
     increment(): void {
