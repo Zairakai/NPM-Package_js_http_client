@@ -1,9 +1,10 @@
 /**
  * Knip configuration
- * @see https://github.com/webpro/knip
+ * @see https://knip.dev/reference/configuration
  */
 export default {
   project: ['src/**/*.ts'],
   ignoreBinaries: ['make'],
-  ignoreDependencies: ['sort-package-json'],
+  // sort-package-json and tsup are run by the scripts of js-dev-tools (make build), which Knip does not read
+  ignoreDependencies: ['sort-package-json', 'tsup'],
 }
