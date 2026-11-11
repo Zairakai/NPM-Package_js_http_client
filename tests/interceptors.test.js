@@ -181,7 +181,7 @@ describe('createErrorLoggerInterceptor', () => {
         url: '/test',
         status: 404,
         statusText: 'Not Found',
-      })
+      }),
     )
 
     consoleSpy.mockRestore()
@@ -203,7 +203,7 @@ describe('createErrorLoggerInterceptor', () => {
         url: '/test',
         status: 500,
         statusText: 'Internal Server Error',
-      })
+      }),
     )
   })
 
@@ -222,7 +222,7 @@ describe('createErrorLoggerInterceptor', () => {
         method: 'GET',
         url: '/test',
         message: 'Network Error',
-      })
+      }),
     )
 
     consoleSpy.mockRestore()

@@ -2,7 +2,7 @@
  * Common interceptors for HTTP clients
  */
 
-import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { RequestTracker } from './request-tracker.js'
 
 /**
@@ -64,7 +64,7 @@ export const createTrackingInterceptors = (tracker: RequestTracker): TrackingInt
 export const createCSRFInterceptor =
   (tokenSource: TokenSource) =>
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = 'function' === typeof tokenSource ? tokenSource() : tokenSource
+    const token = typeof tokenSource === 'function' ? tokenSource() : tokenSource
 
     if (token) {
       config.headers = config.headers ?? {}
@@ -83,7 +83,7 @@ export const createCSRFInterceptor =
 export const createAuthInterceptor =
   (tokenSource: TokenSource, type: string = 'Bearer') =>
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = 'function' === typeof tokenSource ? tokenSource() : tokenSource
+    const token = typeof tokenSource === 'function' ? tokenSource() : tokenSource
 
     if (token) {
       config.headers = config.headers ?? {}
@@ -130,6 +130,7 @@ export const createTimeoutInterceptor =
  */
 interface RetryConfig extends InternalAxiosRequestConfig {
   __retryCount?: number
+  _axios?: AxiosInstance
 }
 
 /**
@@ -142,9 +143,9 @@ interface RetryConfig extends InternalAxiosRequestConfig {
 export const createRetryInterceptor = (
   retries: number = 3,
   delay: number = 1000,
-  shouldRetry: ShouldRetryFunction = () => true
+  shouldRetry: ShouldRetryFunction = () => true,
 ) => {
-  return async (error: AxiosError): Promise<any> => {
+  return async (error: AxiosError): Promise<AxiosResponse> => {
     const config = error.config as RetryConfig | undefined
 
     if (!config || (config.__retryCount ?? 0) >= retries) {
@@ -161,7 +162,7 @@ export const createRetryInterceptor = (
 
     // Try to use the instance from the error, otherwise fall back to axios
     /* c8 ignore next */
-    const axiosInstance = (config as any)._axios ?? axios
+    const axiosInstance: AxiosInstance = config._axios ?? axios
     return axiosInstance.request(config)
   }
 }

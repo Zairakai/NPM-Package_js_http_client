@@ -1,0 +1,3 @@
+{
+  "extends": "@stanislas-poisson/js-dev-tools/config/.markdownlint.json"
+}
