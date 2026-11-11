@@ -1,4 +1,8 @@
-# @zairakai/js-http-client
+# JS HTTP Client
+
+![JS HTTP Client](https://gitlab.com/zairakai/npm-packages/js-http-client/-/raw/main/assets/banner.png)
+
+`@zairakai/js-http-client`
 
 [![Main][pipeline-main-badge]][pipeline-main-link]
 [![Develop][pipeline-develop-badge]][pipeline-develop-link]
@@ -12,6 +16,8 @@
 [![Node.js][node-badge]][node]
 [![ESLint][eslint-badge]][eslint]
 [![Prettier][prettier-badge]][prettier]
+[![Vitest][vitest-badge]][vitest]
+[![Knip][knip-badge]][knip]
 
 Axios-based HTTP client with request tracking, interceptor management, and Laravel CSRF support.
 
@@ -40,6 +46,17 @@ The documentation site has this guide and the reference of the API generated fro
 ```bash
 npm install @zairakai/js-http-client
 ```
+
+### In the browser
+
+The library is made for the web: ESM and CommonJS builds, no Node.js built-ins, `"sideEffects": false`, and `axios` stays external (your bundler picks it up as a dependency). A bundler keeps only what you import (the tests of this repository check it with esbuild): a project that imports `createRequestTracker` alone gets a few hundred bytes, and the interceptors have their own entry point:
+
+```js
+import { createHttpClient } from '@zairakai/js-http-client'
+import { createAuthInterceptor } from '@zairakai/js-http-client/interceptors'
+```
+
+There is no minimum browser version.
 
 ---
 
@@ -150,6 +167,10 @@ make test-all      # vitest + bats + coverage
 [eslint]: https://eslint.org
 [prettier-badge]: https://img.shields.io/badge/formatter-prettier-F7B93E.svg?logo=prettier
 [prettier]: https://prettier.io
+[vitest-badge]: https://img.shields.io/badge/test-vitest-6E9F18.svg?logo=vitest
+[vitest]: https://vitest.dev
+[knip-badge]: https://img.shields.io/badge/dead%20code-knip-EC4899.svg
+[knip]: https://knip.dev
 [ecosystem]: https://gitlab.com/zairakai
 [docs]: https://js-http-client-eb9079.gitlab.io
 [docs-badge]: https://img.shields.io/badge/docs-online-blue
