@@ -192,7 +192,7 @@ describe('createLaravelClient', () => {
           Accept: 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
         }),
-      })
+      }),
     )
   })
 
@@ -209,7 +209,7 @@ describe('createLaravelClient', () => {
         headers: expect.objectContaining({
           'X-Requested-With': 'XMLHttpRequest',
         }),
-      })
+      }),
     )
   })
 })
@@ -240,7 +240,7 @@ describe('createApiClient', () => {
     expect(axios.create).toHaveBeenCalledWith(
       expect.objectContaining({
         withCredentials: false,
-      })
+      }),
     )
 
     // Should not have Laravel headers
@@ -266,7 +266,7 @@ describe('createApiClient', () => {
           Accept: 'application/json',
           'API-Key': 'secret-key',
         }),
-      })
+      }),
     )
   })
 })
