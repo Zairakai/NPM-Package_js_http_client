@@ -139,8 +139,7 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
   if (config.retries && config.retries > 0) {
     // Add the client instance to configs for retry handling
     client.interceptors.request.use((reqConfig) => {
-      ;(reqConfig as any)._axios = client
-      return reqConfig
+      return Object.assign(reqConfig, { _axios: client })
     })
 
     client.interceptors.response.use(
