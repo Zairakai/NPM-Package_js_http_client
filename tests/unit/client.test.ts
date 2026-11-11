@@ -25,4 +25,18 @@ describe('http client factory', () => {
     expect(client.isLoading).toBe(false)
     expect(client.requestCount).toBe(0)
   })
+
+  it('gives the retry interceptor the client through the request config', async () => {
+    const client = createHttpClient({ retries: 2, trackRequests: false })
+    let seen: unknown
+
+    client.client.defaults.adapter = async (config) => {
+      seen = (config as { _axios?: unknown })._axios
+      return { data: {}, status: 200, statusText: 'OK', headers: {}, config }
+    }
+
+    await client.client.get('/users')
+
+    expect(seen).toBe(client.client)
+  })
 })
