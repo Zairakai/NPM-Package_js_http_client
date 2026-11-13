@@ -26,8 +26,8 @@
 | **🐛 Bug Reports** | Use the issue template. Include minimal reproduction steps, expected vs actual behavior, and environment details (Node.js and Axios versions). |
 | **✨ Feature Requests** | Describe the use case. Must fit the scope (HTTP client, interceptors, request tracking, Laravel CSRF). |
 | **🔌 Factory Functions** | Add to `src/client.ts`. Follow `createXxxClient` naming. Support standard Axios options. Add mock-based tests. |
-| **🔗 Interceptors** | Add to `src/interceptors.ts`. Keep functional pattern. Support config options where appropriate. |
-| **📊 Request Tracking** | In `src/request-tracker.ts`. Prevent memory leaks. Cover full lifecycle in tests. |
+| **🔗 Interceptors** | Add to `src/interceptors.ts`. Keep functional pattern. Support config options where appropriate. A retry rule respects the methods that write: they are not retried by default. |
+| **📊 Request Tracking** | In `src/request-tracker.ts`. Prevent memory leaks: a listener of `subscribe` must be removable. Cover full lifecycle in tests. |
 | **📦 Types** | Keep exports in `src/index.ts` stable and backward compatible. |
 
 ---

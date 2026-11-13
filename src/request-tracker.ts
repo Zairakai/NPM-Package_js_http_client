@@ -3,6 +3,21 @@
  */
 
 /**
+ * State that a listener receives when the counter changes
+ */
+export interface RequestTrackerState {
+  /** Current number of active requests */
+  readonly count: number
+  /** Whether there are any active requests */
+  readonly isActive: boolean
+}
+
+/**
+ * Function called when the counter changes
+ */
+export type RequestTrackerListener = (state: RequestTrackerState) => void
+
+/**
  * Interface for request tracker instance
  */
 export interface RequestTracker {
@@ -16,6 +31,13 @@ export interface RequestTracker {
   decrement(): void
   /** Reset the counter to zero */
   reset(): void
+  /**
+   * Call a function each time the counter changes (not when it is set to the
+   * value it already has). It is not called when subscribing: read `count`
+   * for the initial value.
+   * @returns A function that removes the listener
+   */
+  subscribe(listener: RequestTrackerListener): () => void
 }
 
 /**
@@ -24,6 +46,30 @@ export interface RequestTracker {
  */
 export const createRequestTracker = (): RequestTracker => {
   let nbrInternal = 0
+  const listeners = new Set<RequestTrackerListener>()
+
+  // Set the counter and tell the listeners when it changed
+  const update = (value: number): void => {
+    const next = Math.max(0, value)
+
+    if (next === nbrInternal) {
+      return
+    }
+
+    nbrInternal = next
+
+    const state: RequestTrackerState = { count: next, isActive: next > 0 }
+
+    // A copy, so that a listener can unsubscribe while it is called. A listener
+    // that throws does not stop the others.
+    for (const listener of [...listeners]) {
+      try {
+        listener(state)
+      } catch {
+        // The error of a listener is not the business of the tracker
+      }
+    }
+  }
 
   return {
     get count(): number {
@@ -31,7 +77,7 @@ export const createRequestTracker = (): RequestTracker => {
     },
 
     set count(val: number) {
-      nbrInternal = Math.max(0, val)
+      update(val)
     },
 
     get isActive(): boolean {
@@ -39,15 +85,23 @@ export const createRequestTracker = (): RequestTracker => {
     },
 
     increment(): void {
-      nbrInternal++
+      update(nbrInternal + 1)
     },
 
     decrement(): void {
-      nbrInternal = Math.max(0, nbrInternal - 1)
+      update(nbrInternal - 1)
     },
 
     reset(): void {
-      nbrInternal = 0
+      update(0)
+    },
+
+    subscribe(listener: RequestTrackerListener): () => void {
+      listeners.add(listener)
+
+      return () => {
+        listeners.delete(listener)
+      }
     },
   }
 }

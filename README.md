@@ -28,8 +28,9 @@ Axios-based HTTP client with request tracking, interceptor management, and Larav
 ## Features
 
 - **Three factory functions** - `createHttpClient`, `createApiClient`, `createLaravelClient`
-- **Request tracking** - reactive `isLoading` and `requestCount` per client instance
-- **Built-in interceptors** - CSRF token, auth bearer, retry with backoff, error logging, timeout
+- **Request tracking** - `isLoading` and `requestCount`, and `subscribe` to be told when they change, per client or shared
+- **Built-in interceptors** - CSRF token, auth bearer, retry (fixed or exponential delay), error logging, timeout
+- **A shortcut for each HTTP method** - `get`, `head`, `options`, `post`, `put`, `patch`, `delete` and `query`
 - **Laravel ready** - automatic `X-Requested-With` and CSRF headers
 - **TypeScript first** - full type exports including `AxiosInstance`, `AxiosResponse`, `HttpMethod`
 
@@ -87,6 +88,76 @@ console.log(api.isLoading)     // true while requests are pending
 console.log(api.requestCount)  // number of active requests
 ```
 
+<details>
+<summary>Follow the requests in progress: subscribe, for a loading bar</summary>
+
+`subscribe` calls a function each time the number of requests in progress changes, with `{ count, isActive }`. It returns the function that removes it. The listener is not called when it subscribes: read `requestCount` for the first value.
+
+```ts
+import { createHttpClient, createRequestTracker } from '@zairakai/js-http-client'
+
+// One tracker for several clients: the count of the whole page
+const tracker = createRequestTracker()
+const api = createHttpClient({ baseURL: '/api', tracker })
+const files = createHttpClient({ baseURL: '/files', tracker })
+
+const stop = tracker.subscribe(({ count, isActive }) => {
+  progressBar.hidden = !isActive // initial loading bar
+})
+```
+
+`globalRequestTracker` is a shared tracker that you can pass the same way. `api.subscribe(...)` follows the tracker of that client.
+
+</details>
+
+<details>
+<summary>Retry: network failures only, by default</summary>
+
+The retry is off until you give `retries`. It works for every method, and by default it is careful: it retries a **failure of the network** (no response) of a **method that only reads** (see the table of the methods), up to the number of `retries`, and never a cancelled request. A response of the server, a `500` included, is an answer: it is not retried. A method that writes is not either, so that nothing is written twice. Open it up with `methods`, a list or `'all'`.
+
+```ts
+import {
+  createHttpClient,
+  createShouldRetry,
+  exponentialBackoff,
+} from '@zairakai/js-http-client'
+
+const api = createHttpClient({
+  baseURL: '/api',
+  retries: 5,
+  // 300 ms by default; a number, or a function of the attempt
+  retryDelay: exponentialBackoff({ base: 300, factor: 2, max: 10000, jitter: 0.5 }),
+  // open it up: also retry a 503, and a POST that you know is safe to repeat
+  shouldRetry: createShouldRetry({ methods: ['get', 'post'], statuses: [503] }),
+})
+```
+
+`createShouldRetry` takes `methods` (a list, or `'all'`), `statuses` and `retryTimeouts` (default `true`). You can write your own condition: `(error, attempt) => boolean | Promise<boolean>`, called before each retry.
+
+</details>
+
+<details>
+<summary>HTTP methods: a shortcut for each one</summary>
+
+| Shortcut | Method | Body | Retried by default |
+| - | - | - | - |
+| `get(url, config)` | GET | no | yes |
+| `head(url, config)` | HEAD | no | yes |
+| `options(url, config)` | OPTIONS | no | yes |
+| `query(url, data, config)` | QUERY | yes | yes |
+| `post(url, data, config)` | POST | yes | no |
+| `put(url, data, config)` | PUT | yes | no |
+| `patch(url, data, config)` | PATCH | yes | no |
+| `delete(url, config)` | DELETE | no | no |
+
+Every shortcut takes the config of the request (headers, params, signal...) and exists on the three kinds of client. The methods that are retried by default are the ones that only read; the next section opens any method up. `HttpMethod` lists them all.
+
+`QUERY` ([RFC 10008](https://www.rfc-editor.org/rfc/rfc10008.html)) is `GET` with the query in the body: safe and idempotent, for a search that is too long or too structured for the URL. Its body needs a `Content-Type` (JSON for an object), and a server answers a request without one with an error `4xx`.
+
+A call to another origin with a method other than `GET`, `HEAD` or `POST` first sends a preflight request: the server has to allow the method in `Access-Control-Allow-Methods`.
+
+</details>
+
 ---
 
 ## Development
@@ -128,7 +199,7 @@ make test-all      # vitest + bats + coverage
 [license]: ./LICENSE
 [security-badge]: https://img.shields.io/badge/security-scanned-green.svg
 [security]: ./SECURITY.md
-[issues-badge]: https://img.shields.io/gitlab/issues/open-raw/zairakai%2Fnpm-packages%2Fhttp-client?logo=gitlab&label=Issues
+[issues-badge]: https://img.shields.io/gitlab/issues/open-raw/zairakai%2Fnpm-packages%2Fjs-http-client?logo=gitlab&label=Issues
 [issues]: https://gitlab.com/zairakai/npm-packages/js-http-client/-/issues
 [node-badge]: https://img.shields.io/badge/node.js-%3E%3D24-green.svg?logo=node.js
 [node]: https://nodejs.org

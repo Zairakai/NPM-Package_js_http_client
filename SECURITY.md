@@ -34,6 +34,7 @@ Please **do not disclose vulnerabilities publicly** until they have been reviewe
 - no external network calls at import time
 - no credential storage - tokens are passed by the consuming app
 - CSRF handling delegates to the browser cookie jar via Axios defaults
+- a method that writes (`POST`, `PUT`, `PATCH`, `DELETE`) is not retried by default: a request that changes data is not sent twice
 
 You remain responsible for validating server responses and securing token storage in consuming applications.
 
