@@ -285,9 +285,10 @@ describe('createRetryInterceptor', () => {
 
   it('should retry failed requests up to maxRetries', async () => {
     const interceptor = createRetryInterceptor(2, 1000)
+    // A failure of the network: a response of the server, even a 500, is not retried
     const error = {
       config: { url: 'https://example.com/test', _axios: mockAxiosInstance },
-      response: { status: 500 },
+      code: 'ERR_NETWORK',
       isAxiosError: true,
     }
 
@@ -297,8 +298,7 @@ describe('createRetryInterceptor', () => {
     const retryPromise = interceptor(error)
 
     // Fast-forward timers for retries
-    vi.advanceTimersByTime(1000)
-    await Promise.resolve() // Allow promise to resolve
+    await vi.advanceTimersByTimeAsync(1000)
 
     await expect(retryPromise).resolves.toEqual({ data: 'success' })
     expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1)
@@ -325,7 +325,7 @@ describe('createRetryInterceptor', () => {
     }
 
     await expect(interceptor(error)).rejects.toBe(error)
-    expect(shouldRetry).toHaveBeenCalledWith(error)
+    expect(shouldRetry).toHaveBeenCalledWith(error, 1)
   })
 
   it('should use custom shouldRetry function', async () => {
@@ -340,9 +340,9 @@ describe('createRetryInterceptor', () => {
     mockAxiosInstance.request.mockResolvedValueOnce({ data: 'success' })
 
     const retryPromise = interceptor(error)
-    vi.advanceTimersByTime(1000)
+    await vi.advanceTimersByTimeAsync(1000)
 
     await expect(retryPromise).resolves.toEqual({ data: 'success' })
-    expect(shouldRetry).toHaveBeenCalledWith(error)
+    expect(shouldRetry).toHaveBeenCalledWith(error, 1)
   })
 })
