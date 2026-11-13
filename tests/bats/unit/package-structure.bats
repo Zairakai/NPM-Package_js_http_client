@@ -242,3 +242,18 @@ teardown() {
   assert_file_contains "${PROJECT_ROOT}/README.md" "assets/icon.png"
   assert_file_not_contains "${PROJECT_ROOT}/README.md" "assets/banner.png"
 }
+
+@test "package.json has no engines: the package is made for the browser" {
+  assert_file_not_contains "${PROJECT_ROOT}/package.json" '"engines"'
+}
+
+@test "the README folds its long sections in details" {
+  for title in "Follow the requests in progress" "Retry" "HTTP methods"; do
+    assert_file_contains "${PROJECT_ROOT}/README.md" "<summary>${title}"
+  done
+}
+
+@test "the badges of the README name this project: js-http-client" {
+  assert_file_contains "${PROJECT_ROOT}/README.md" "npm-packages%2Fjs-http-client"
+  assert_file_not_contains "${PROJECT_ROOT}/README.md" "npm-packages%2Fhttp-client"
+}
