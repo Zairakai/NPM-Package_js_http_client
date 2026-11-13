@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createAuthInterceptor, createCSRFInterceptor, createRetryInterceptor } from '../../src/interceptors'
+import {
+  createAuthInterceptor,
+  createCSRFInterceptor,
+  createRetryInterceptor,
+} from '../../src/interceptors'
 
 describe('interceptors', () => {
   it('adds csrf header', () => {
