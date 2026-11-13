@@ -32,7 +32,7 @@ Please **do not disclose vulnerabilities publicly** until they have been reviewe
 `@zairakai/js-http-client` provides Axios factory functions, request tracking, and interceptor management:
 
 - no external network calls at import time
-- no credential storage — tokens are passed by the consuming app
+- no credential storage - tokens are passed by the consuming app
 - CSRF handling delegates to the browser cookie jar via Axios defaults
 
 You remain responsible for validating server responses and securing token storage in consuming applications.

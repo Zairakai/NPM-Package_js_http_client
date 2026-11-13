@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { createApiClient, createHttpClient, createLaravelClient } from '../src/client.ts'
+import {
+  createApiClient,
+  createHttpClient,
+  createLaravelClient,
+} from '../src/client.ts'
 
 // Mock axios
 vi.mock('axios')
@@ -83,19 +87,26 @@ describe('createHttpClient', () => {
   it('should add CSRF interceptor when csrfToken is provided', () => {
     createHttpClient({ csrfToken: 'test-csrf-token' })
 
-    expect(mockInterceptors.request.use).toHaveBeenCalledWith(expect.any(Function))
+    expect(mockInterceptors.request.use).toHaveBeenCalledWith(
+      expect.any(Function),
+    )
   })
 
   it('should add auth interceptor when authToken is provided', () => {
     createHttpClient({ authToken: 'test-auth-token' })
 
-    expect(mockInterceptors.request.use).toHaveBeenCalledWith(expect.any(Function))
+    expect(mockInterceptors.request.use).toHaveBeenCalledWith(
+      expect.any(Function),
+    )
   })
 
   it('should add retry interceptor when retries > 0', () => {
     createHttpClient({ retries: 3 })
 
-    expect(mockInterceptors.response.use).toHaveBeenCalledWith(expect.any(Function), expect.any(Function))
+    expect(mockInterceptors.response.use).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.any(Function),
+    )
   })
 
   it('should attach axios instance to request config when retries configured', () => {
@@ -115,13 +126,17 @@ describe('createHttpClient', () => {
   it('should add Laravel headers by default', () => {
     createHttpClient()
 
-    expect(mockAxiosInstance.defaults.headers.common['X-Requested-With']).toBe('XMLHttpRequest')
+    expect(mockAxiosInstance.defaults.headers.common['X-Requested-With']).toBe(
+      'XMLHttpRequest',
+    )
   })
 
   it('should not add Laravel headers when laravel is false', () => {
     createHttpClient({ laravel: false })
 
-    expect(mockAxiosInstance.defaults.headers.common['X-Requested-With']).toBeUndefined()
+    expect(
+      mockAxiosInstance.defaults.headers.common['X-Requested-With'],
+    ).toBeUndefined()
   })
 
   it('should provide convenience methods', () => {
@@ -132,13 +147,25 @@ describe('createHttpClient', () => {
     expect(mockAxiosInstance.get).toHaveBeenCalledWith('/test', undefined)
 
     httpClient.post('/test', { data: 'test' })
-    expect(mockAxiosInstance.post).toHaveBeenCalledWith('/test', { data: 'test' }, undefined)
+    expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+      '/test',
+      { data: 'test' },
+      undefined,
+    )
 
     httpClient.put('/test', { data: 'test' })
-    expect(mockAxiosInstance.put).toHaveBeenCalledWith('/test', { data: 'test' }, undefined)
+    expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+      '/test',
+      { data: 'test' },
+      undefined,
+    )
 
     httpClient.patch('/test', { data: 'test' })
-    expect(mockAxiosInstance.patch).toHaveBeenCalledWith('/test', { data: 'test' }, undefined)
+    expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
+      '/test',
+      { data: 'test' },
+      undefined,
+    )
 
     httpClient.delete('/test')
     expect(mockAxiosInstance.delete).toHaveBeenCalledWith('/test', undefined)
@@ -244,7 +271,9 @@ describe('createApiClient', () => {
     )
 
     // Should not have Laravel headers
-    expect(apiClient.client.defaults.headers.common['X-Requested-With']).toBeUndefined()
+    expect(
+      apiClient.client.defaults.headers.common['X-Requested-With'],
+    ).toBeUndefined()
   })
 
   it('should allow custom configuration for API client', () => {

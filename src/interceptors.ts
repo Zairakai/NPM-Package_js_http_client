@@ -2,8 +2,13 @@
  * Common interceptors for HTTP clients
  */
 
-import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
-import { RequestTracker } from './request-tracker.js'
+import axios, {
+  AxiosError,
+  type AxiosInstance,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from 'axios'
+import { type RequestTracker } from './request-tracker.js'
 
 /**
  * Token source type - either a string or a function that returns a string
@@ -35,7 +40,9 @@ export interface TrackingInterceptors {
  * @param tracker - Request tracker instance
  * @returns Request and response interceptors
  */
-export const createTrackingInterceptors = (tracker: RequestTracker): TrackingInterceptors => ({
+export const createTrackingInterceptors = (
+  tracker: RequestTracker,
+): TrackingInterceptors => ({
   request: (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     tracker.increment()
     return config
@@ -64,7 +71,8 @@ export const createTrackingInterceptors = (tracker: RequestTracker): TrackingInt
 export const createCSRFInterceptor =
   (tokenSource: TokenSource) =>
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = typeof tokenSource === 'function' ? tokenSource() : tokenSource
+    const token =
+      typeof tokenSource === 'function' ? tokenSource() : tokenSource
 
     if (token) {
       config.headers = config.headers ?? {}
@@ -83,7 +91,8 @@ export const createCSRFInterceptor =
 export const createAuthInterceptor =
   (tokenSource: TokenSource, type: string = 'Bearer') =>
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = typeof tokenSource === 'function' ? tokenSource() : tokenSource
+    const token =
+      typeof tokenSource === 'function' ? tokenSource() : tokenSource
 
     if (token) {
       config.headers = config.headers ?? {}
