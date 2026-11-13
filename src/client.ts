@@ -6,9 +6,11 @@ import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
   type AxiosResponse,
+  type Method,
 } from 'axios'
 import {
   type Logger,
+  type RetryDelay,
   type ShouldRetryFunction,
   type TokenSource,
   createAuthInterceptor,
@@ -18,7 +20,17 @@ import {
   createTimeoutInterceptor,
   createTrackingInterceptors,
 } from './interceptors.js'
-import { type RequestTracker, createRequestTracker } from './request-tracker.js'
+import {
+  type RequestTracker,
+  type RequestTrackerListener,
+  createRequestTracker,
+} from './request-tracker.js'
+
+/**
+ * HTTP method. `QUERY` (RFC 10008) is a safe and idempotent method that carries
+ * its query in the body.
+ */
+export type HttpMethod = Method | 'QUERY' | 'query'
 
 /**
  * HTTP client configuration options
@@ -34,6 +46,12 @@ export interface HttpClientOptions {
   timeout?: number
   /** Enable request tracking */
   trackRequests?: boolean
+  /**
+   * Tracker that counts the requests of this client. Give the same one to
+   * several clients, or `globalRequestTracker`, to count their requests together
+   * (for example for an initial loading bar). Default: one tracker for the client.
+   */
+  tracker?: RequestTracker
   /** CSRF token or getter function */
   csrfToken?: TokenSource
   /** Auth token or getter function */
@@ -44,11 +62,11 @@ export interface HttpClientOptions {
   enableErrorLogging?: boolean
   /** Custom logger function */
   logger?: Logger
-  /** Number of retries for failed requests */
+  /** Number of retries for failed requests. Default: none (5 when you ask for retries with the interceptor) */
   retries?: number
-  /** Delay between retries in milliseconds */
-  retryDelay?: number
-  /** Custom retry logic */
+  /** Delay between retries in milliseconds, or a function of the attempt. Default: 300 */
+  retryDelay?: RetryDelay
+  /** Retry logic. Default: network failures on the methods that only read, see `createShouldRetry` */
   shouldRetry?: ShouldRetryFunction
   /** Enable Laravel-specific features */
   laravel?: boolean
@@ -66,9 +84,23 @@ export interface HttpClient {
   readonly isLoading: boolean
   /** Current number of active requests */
   readonly requestCount: number
+  /**
+   * Call a function each time the number of active requests changes.
+   * Nothing is called when tracking is disabled.
+   * @returns A function that removes the listener
+   */
+  subscribe(listener: RequestTrackerListener): () => void
 
-  // Convenience HTTP methods
+  // Convenience HTTP methods: one for each method
   get<T = unknown>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
+  head<T = unknown>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
+  options<T = unknown>(
     url: string,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>>
@@ -89,6 +121,12 @@ export interface HttpClient {
   ): Promise<AxiosResponse<T>>
   delete<T = unknown>(
     url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
+  /** QUERY (RFC 10008): like GET, with the query in the body */
+  query<T = unknown>(
+    url: string,
+    data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<T>>
 }
@@ -132,7 +170,10 @@ export const createHttpClient = (
   })
 
   // Create request tracker if enabled
-  const tracker = config.trackRequests !== false ? createRequestTracker() : null
+  const tracker =
+    config.trackRequests !== false
+      ? (config.tracker ?? createRequestTracker())
+      : null
 
   // Add request tracking interceptors
   if (tracker) {
@@ -203,6 +244,14 @@ export const createHttpClient = (
       url: string,
       config?: AxiosRequestConfig,
     ): Promise<AxiosResponse<T>> => client.get<T>(url, config),
+    head: <T = unknown>(
+      url: string,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> => client.head<T>(url, config),
+    options: <T = unknown>(
+      url: string,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> => client.options<T>(url, config),
     post: <T = unknown>(
       url: string,
       data?: unknown,
@@ -222,6 +271,12 @@ export const createHttpClient = (
       url: string,
       config?: AxiosRequestConfig,
     ): Promise<AxiosResponse<T>> => client.delete<T>(url, config),
+    query: <T = unknown>(
+      url: string,
+      data?: unknown,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> =>
+      client.request<T>({ ...config, url, method: 'QUERY', data }),
 
     // Request status
     get isLoading(): boolean {
@@ -233,6 +288,9 @@ export const createHttpClient = (
       /* c8 ignore next */
       return tracker ? tracker.count : 0
     },
+
+    subscribe: (listener: RequestTrackerListener): (() => void) =>
+      tracker ? tracker.subscribe(listener) : () => undefined,
   }
 }
 

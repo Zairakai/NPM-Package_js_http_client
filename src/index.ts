@@ -9,12 +9,15 @@ export {
   createLaravelClient,
   type HttpClient,
   type HttpClientOptions,
+  type HttpMethod,
 } from './client.js'
 
 export {
   createRequestTracker,
   globalRequestTracker,
   type RequestTracker,
+  type RequestTrackerListener,
+  type RequestTrackerState,
 } from './request-tracker.js'
 
 export {
@@ -22,10 +25,17 @@ export {
   createCSRFInterceptor,
   createErrorLoggerInterceptor,
   createRetryInterceptor,
+  createShouldRetry,
   createTimeoutInterceptor,
   createTrackingInterceptors,
+  defaultShouldRetry,
+  exponentialBackoff,
+  isNetworkError,
+  type ExponentialBackoffOptions,
   type Logger,
+  type RetryDelay,
   type ShouldRetryFunction,
+  type ShouldRetryOptions,
   type TokenSource,
   type TrackingInterceptors,
 } from './interceptors.js'
@@ -37,5 +47,4 @@ export type {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
-  Method as HttpMethod,
 } from 'axios'
