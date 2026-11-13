@@ -1,8 +1,8 @@
+<p align="center">
+  <img src="https://gitlab.com/zairakai/npm-packages/js-http-client/-/raw/main/assets/icon.png" alt="JS HTTP Client" width="160">
+</p>
+
 # JS HTTP Client
-
-![JS HTTP Client](https://gitlab.com/zairakai/npm-packages/js-http-client/-/raw/main/assets/banner.png)
-
-`@zairakai/js-http-client`
 
 [![Main][pipeline-main-badge]][pipeline-main-link]
 [![Develop][pipeline-develop-badge]][pipeline-develop-link]
@@ -27,17 +27,17 @@ Axios-based HTTP client with request tracking, interceptor management, and Larav
 
 ## Features
 
-- **Three factory functions** — `createHttpClient`, `createApiClient`, `createLaravelClient`
-- **Request tracking** — reactive `isLoading` and `requestCount` per client instance
-- **Built-in interceptors** — CSRF token, auth bearer, retry with backoff, error logging, timeout
-- **Laravel ready** — automatic `X-Requested-With` and CSRF headers
-- **TypeScript first** — full type exports including `AxiosInstance`, `AxiosResponse`, `HttpMethod`
+- **Three factory functions** - `createHttpClient`, `createApiClient`, `createLaravelClient`
+- **Request tracking** - reactive `isLoading` and `requestCount` per client instance
+- **Built-in interceptors** - CSRF token, auth bearer, retry with backoff, error logging, timeout
+- **Laravel ready** - automatic `X-Requested-With` and CSRF headers
+- **TypeScript first** - full type exports including `AxiosInstance`, `AxiosResponse`, `HttpMethod`
 
 ---
 
 ## Documentation
 
-The documentation site has this guide and the reference of the API generated from the source with TypeDoc, for every released version (selector at the top right, `next` is `main`). Build it with `cd docs && npm ci && npm run dev`. It is published with GitLab Pages from `main`.
+The documentation site has this guide and the reference of the API (the factory functions, their options and the interceptors) generated from the source with TypeDoc, for every released version (selector at the top right, `next` is `main`). Build it with `cd docs && npm ci && npm run dev`. It is published with GitLab Pages from `main`.
 
 ---
 
@@ -85,37 +85,6 @@ const publicApi = createApiClient({ baseURL: 'https://public.api.com' })
 // Request tracking
 console.log(api.isLoading)     // true while requests are pending
 console.log(api.requestCount)  // number of active requests
-```
-
----
-
-## API
-
-### Factory functions
-
-| Function | Description |
-| - | - |
-| `createHttpClient(options?)` | Base factory. Full control over all options. |
-| `createLaravelClient(options?)` | Adds `withCredentials`, `X-Requested-With`, and CSRF support. |
-| `createApiClient(options?)` | Clean JSON API client without Laravel-specific headers. |
-
-### Options
-
-| Option | Type | Default | Description |
-| - | - | - | - |
-| `baseURL` | `string` | `''` | Base URL for all requests |
-| `timeout` | `number` | `10000` | Request timeout in ms |
-| `authToken` | `string \| (() => string)` | — | Bearer token or token factory |
-| `csrfToken` | `string \| (() => string)` | — | CSRF token or factory |
-| `retries` | `number` | `0` | Number of retry attempts on failure |
-| `retryDelay` | `number` | `1000` | Delay between retries in ms |
-| `trackRequests` | `boolean` | `true` | Enable `isLoading` / `requestCount` |
-| `logger` | `Logger` | — | Custom error logger |
-
-### Standalone interceptors
-
-```ts
-import { createRetryInterceptor, createAuthInterceptor, createCSRFInterceptor } from '@zairakai/js-http-client'
 ```
 
 ---
