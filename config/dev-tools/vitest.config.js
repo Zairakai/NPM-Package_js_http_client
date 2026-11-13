@@ -1,27 +1,13 @@
-import baseConfig from '@zairakai/js-dev-tools/vitest'
-import { defineConfig } from 'vitest/config'
+/**
+ * Project Vitest configuration.
+ * Extends the @zairakai/js-dev-tools base config: environment, coverage, thresholds and reports come from it.
+ * The tests use the globals of Vitest (afterEach...).
+ */
 
-const baseTest = baseConfig.test ?? {}
-const baseCoverage = baseTest.coverage ?? {}
+import baseConfig from '@zairakai/js-dev-tools/config/vitest.config.js'
+import { defineConfig, mergeConfig } from 'vitest/config'
 
-export default defineConfig({
-  ...baseConfig,
-  test: {
-    ...baseTest,
-    environment: 'node',
-    globals: true,
-    coverage: {
-      ...baseCoverage,
-      // cobertura is read by the pipeline (coverage/cobertura-coverage.xml)
-      reporter: ['text', 'lcov', 'html', 'cobertura'],
-      exclude: [
-        ...(baseCoverage.exclude ?? []),
-        'tests/**',
-        'config/dev-tools/vitest.config.js',
-        'config/dev-tools/eslint.config.js',
-        'config/dev-tools/prettier.config.js',
-        'config/dev-tools/tsup.config.js',
-      ],
-    },
-  },
-})
+export default mergeConfig(
+  baseConfig,
+  defineConfig({ test: { globals: true } }),
+)

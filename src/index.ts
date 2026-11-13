@@ -11,7 +11,11 @@ export {
   type HttpClientOptions,
 } from './client.js'
 
-export { createRequestTracker, globalRequestTracker, type RequestTracker } from './request-tracker.js'
+export {
+  createRequestTracker,
+  globalRequestTracker,
+  type RequestTracker,
+} from './request-tracker.js'
 
 export {
   createAuthInterceptor,
@@ -28,4 +32,10 @@ export {
 
 // Re-export axios for convenience
 export { default as axios } from 'axios'
-export type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, Method as HttpMethod } from 'axios'
+export type {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  Method as HttpMethod,
+} from 'axios'

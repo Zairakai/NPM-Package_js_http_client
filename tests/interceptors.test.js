@@ -31,7 +31,9 @@ describe('createTrackingInterceptors', () => {
   it('should reject request errors without affecting tracker', async () => {
     const error = new Error('Request error')
 
-    await expect(interceptors.requestError(error)).rejects.toThrow('Request error')
+    await expect(interceptors.requestError(error)).rejects.toThrow(
+      'Request error',
+    )
     expect(mockTracker.increment).not.toHaveBeenCalled()
     expect(mockTracker.decrement).not.toHaveBeenCalled()
   })
@@ -47,7 +49,9 @@ describe('createTrackingInterceptors', () => {
   it('should decrement tracker on response error', async () => {
     const error = new Error('Response error')
 
-    await expect(interceptors.responseError(error)).rejects.toThrow('Response error')
+    await expect(interceptors.responseError(error)).rejects.toThrow(
+      'Response error',
+    )
     expect(mockTracker.decrement).toHaveBeenCalledTimes(1)
   })
 })

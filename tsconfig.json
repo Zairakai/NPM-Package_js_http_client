@@ -3,26 +3,11 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": false,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src",
-    "removeComments": false,
-    "isolatedModules": true,
-    "ignoreDeprecations": "6.0"
+    "rootDir": "src"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "tests", "**/*.test.ts", "**/*.spec.ts"]

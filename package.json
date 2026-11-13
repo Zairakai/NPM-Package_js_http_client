@@ -1,15 +1,20 @@
 {
   "name": "@zairakai/js-http-client",
   "version": "0.0.0",
-  "description": "Configurable HTTP client built on axios with request tracking, Laravel CSRF support, and interceptor management",
+  "description": "Axios HTTP client factories in TypeScript, with request tracking, Laravel CSRF support and ready-made interceptors (auth, retry, timeout, error logging)",
   "keywords": [
     "http",
-    "client",
+    "http-client",
     "axios",
-    "laravel",
-    "csrf",
     "interceptors",
-    "api"
+    "csrf",
+    "laravel",
+    "retry",
+    "request-tracking",
+    "loading-state",
+    "typescript",
+    "api",
+    "browser"
   ],
   "homepage": "https://js-http-client-eb9079.gitlab.io",
   "bugs": {
@@ -39,6 +44,7 @@
       "role": "Maintainer"
     }
   ],
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {
@@ -72,23 +78,36 @@
     "prettier": "bash node_modules/@zairakai/js-dev-tools/scripts/prettier.sh",
     "prettier:fix": "bash node_modules/@zairakai/js-dev-tools/scripts/prettier-fix.sh",
     "setup": "bash node_modules/@zairakai/js-dev-tools/scripts/setup-project.sh",
+    "stylelint": "bash node_modules/@zairakai/js-dev-tools/scripts/stylelint.sh",
+    "stylelint:fix": "bash node_modules/@zairakai/js-dev-tools/scripts/stylelint-fix.sh",
     "test": "make test-all",
     "typecheck": "tsc --noEmit",
     "validate": "make quality"
   },
   "overrides": {
+    "brace-expansion": "5.0.12",
+    "colord": "2.9.7",
     "esbuild": "^0.28.2",
-    "re2js": "2.9.1"
+    "fast-uri": "3.1.9",
+    "js-yaml": {
+      ".": "4.3.2"
+    },
+    "katex": "0.18.11",
+    "markdown-it": "14.3.3",
+    "minimatch": "11.0.6",
+    "nanoid": "3.3.20",
+    "re2js": "2.9.1",
+    "smol-toml": "1.9.0"
   },
   "dependencies": {
-    "axios": "^1.21.0"
+    "axios": "^1.21.1"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^5.1.0",
-    "@zairakai/js-dev-tools": "^3.21.0",
+    "@zairakai/js-dev-tools": "^4.1.0",
     "esbuild": "^0.28.2",
-    "knip": "^6.44.2",
+    "knip": "^6.45.1",
     "sort-package-json": "^4.1.0",
     "tsup": "^9.0.0",
     "typedoc": "^0.28.20",
@@ -105,6 +124,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "sideEffects": false
+  }
 }

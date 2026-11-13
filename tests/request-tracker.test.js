@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { createRequestTracker, globalRequestTracker } from '../src/request-tracker.ts'
+import {
+  createRequestTracker,
+  globalRequestTracker,
+} from '../src/request-tracker.ts'
 
 describe('createRequestTracker', () => {
   let tracker

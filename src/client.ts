@@ -2,11 +2,15 @@
  * HTTP client factory with configurable options
  */
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios'
 import {
-  Logger,
-  ShouldRetryFunction,
-  TokenSource,
+  type Logger,
+  type ShouldRetryFunction,
+  type TokenSource,
   createAuthInterceptor,
   createCSRFInterceptor,
   createErrorLoggerInterceptor,
@@ -14,7 +18,7 @@ import {
   createTimeoutInterceptor,
   createTrackingInterceptors,
 } from './interceptors.js'
-import { RequestTracker, createRequestTracker } from './request-tracker.js'
+import { type RequestTracker, createRequestTracker } from './request-tracker.js'
 
 /**
  * HTTP client configuration options
@@ -64,17 +68,37 @@ export interface HttpClient {
   readonly requestCount: number
 
   // Convenience HTTP methods
-  get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
-  post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
-  put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
-  patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
-  delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
+  get<T = unknown>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
+  post<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
+  put<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
+  patch<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
+  delete<T = unknown>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>>
 }
 
 /**
  * Default configuration for HTTP clients
  */
-const DEFAULT_CONFIG: Required<Pick<HttpClientOptions, 'baseURL' | 'timeout' | 'withCredentials' | 'headers'>> = {
+const DEFAULT_CONFIG: Required<
+  Pick<HttpClientOptions, 'baseURL' | 'timeout' | 'withCredentials' | 'headers'>
+> = {
   baseURL: '',
   timeout: 10000,
   withCredentials: false,
@@ -89,7 +113,9 @@ const DEFAULT_CONFIG: Required<Pick<HttpClientOptions, 'baseURL' | 'timeout' | '
  * @param options - Configuration options
  * @returns Configured axios instance with tracker
  */
-export const createHttpClient = (options: HttpClientOptions = {}): HttpClient => {
+export const createHttpClient = (
+  options: HttpClientOptions = {},
+): HttpClient => {
   // Deep-merge headers so DEFAULT_CONFIG.headers are never lost when options.headers is provided.
   const config = {
     ...DEFAULT_CONFIG,
@@ -111,8 +137,14 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
   // Add request tracking interceptors
   if (tracker) {
     const trackingInterceptors = createTrackingInterceptors(tracker)
-    client.interceptors.request.use(trackingInterceptors.request, trackingInterceptors.requestError)
-    client.interceptors.response.use(trackingInterceptors.response, trackingInterceptors.responseError)
+    client.interceptors.request.use(
+      trackingInterceptors.request,
+      trackingInterceptors.requestError,
+    )
+    client.interceptors.response.use(
+      trackingInterceptors.response,
+      trackingInterceptors.responseError,
+    )
   }
 
   // Add CSRF interceptor
@@ -122,7 +154,9 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
 
   // Add auth interceptor
   if (config.authToken) {
-    client.interceptors.request.use(createAuthInterceptor(config.authToken, config.authType))
+    client.interceptors.request.use(
+      createAuthInterceptor(config.authToken, config.authType),
+    )
   }
 
   // Add timeout interceptor if different from default
@@ -132,7 +166,10 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
 
   // Add error logging interceptor
   if (config.enableErrorLogging !== false) {
-    client.interceptors.response.use((response) => response, createErrorLoggerInterceptor(config.logger))
+    client.interceptors.response.use(
+      (response) => response,
+      createErrorLoggerInterceptor(config.logger),
+    )
   }
 
   // Add retry interceptor
@@ -144,7 +181,11 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
 
     client.interceptors.response.use(
       (response) => response,
-      createRetryInterceptor(config.retries, config.retryDelay, config.shouldRetry),
+      createRetryInterceptor(
+        config.retries,
+        config.retryDelay,
+        config.shouldRetry,
+      ),
     )
   }
 
@@ -158,16 +199,29 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
     tracker,
 
     // Convenience methods
-    get: <T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
-      client.get<T>(url, config),
-    post: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
-      client.post<T>(url, data, config),
-    put: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
-      client.put<T>(url, data, config),
-    patch: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
-      client.patch<T>(url, data, config),
-    delete: <T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
-      client.delete<T>(url, config),
+    get: <T = unknown>(
+      url: string,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> => client.get<T>(url, config),
+    post: <T = unknown>(
+      url: string,
+      data?: unknown,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> => client.post<T>(url, data, config),
+    put: <T = unknown>(
+      url: string,
+      data?: unknown,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> => client.put<T>(url, data, config),
+    patch: <T = unknown>(
+      url: string,
+      data?: unknown,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> => client.patch<T>(url, data, config),
+    delete: <T = unknown>(
+      url: string,
+      config?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<T>> => client.delete<T>(url, config),
 
     // Request status
     get isLoading(): boolean {
@@ -187,7 +241,9 @@ export const createHttpClient = (options: HttpClientOptions = {}): HttpClient =>
  * @param options - Configuration options
  * @returns Configured HTTP client
  */
-export const createLaravelClient = (options: HttpClientOptions = {}): HttpClient => {
+export const createLaravelClient = (
+  options: HttpClientOptions = {},
+): HttpClient => {
   return createHttpClient({
     withCredentials: true,
     headers: {
@@ -202,7 +258,9 @@ export const createLaravelClient = (options: HttpClientOptions = {}): HttpClient
  * @param options - Configuration options
  * @returns Configured HTTP client
  */
-export const createApiClient = (options: HttpClientOptions = {}): HttpClient => {
+export const createApiClient = (
+  options: HttpClientOptions = {},
+): HttpClient => {
   return createHttpClient({
     withCredentials: false,
     laravel: false,
