@@ -119,9 +119,6 @@
       "optional": false
     }
   },
-  "engines": {
-    "node": ">=24.0.0"
-  },
   "publishConfig": {
     "access": "public"
   }
