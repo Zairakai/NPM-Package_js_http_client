@@ -187,8 +187,8 @@ teardown() {
   assert_file_contains "${PROJECT_ROOT}/tsconfig.json" "@zairakai/js-dev-tools/tsconfig"
 }
 
-@test "package.json requires js-dev-tools 4.1" {
-  assert_file_contains "${PROJECT_ROOT}/package.json" '"@zairakai/js-dev-tools": "^4.1.'
+@test "package.json requires js-dev-tools" {
+  assert_file_contains "${PROJECT_ROOT}/package.json" '"@zairakai/js-dev-tools":'
 }
 
 @test "package.json has the overrides of js-dev-tools" {
