@@ -104,15 +104,15 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
-    "@vitest/coverage-v8": "^5.1.0",
+    "@vitest/coverage-v8": "^5.1.1",
     "@zairakai/js-dev-tools": "^4.4.0",
     "esbuild": "^0.28.2",
-    "knip": "^6.45.1",
+    "knip": "^6.48.0",
     "sort-package-json": "^4.1.0",
     "tsup": "^9.0.0",
     "typedoc": "^0.28.20",
     "typescript": "^6.0.3",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   },
   "peerDependenciesMeta": {
     "axios": {
